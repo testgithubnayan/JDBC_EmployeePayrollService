@@ -7,7 +7,7 @@ public class JDBCConnection {
 
         String URL = "jdbc:mysql://localhost:3306/payroll_service";
         String USER = "root";
-        String PASS = "nayan@7211";
+        String PASS = "nayan@711";
 
         Connection connection;
 
@@ -20,9 +20,8 @@ public class JDBCConnection {
         
         try {
             connection = DriverManager.getConnection(URL, USER, PASS);
-            PreparedStatement preparedStatement = connection.prepareStatement("update employee_payroll set salary=? where name=? ");
-            preparedStatement.setDouble(1,150000);
-            preparedStatement.setString(2,"daniel");
+            PreparedStatement preparedStatement = connection.prepareStatement(("select * from employee_payroll WHERE start_date BETWEEN CAST('2018-01-01'\n" +
+                    "AS DATE) AND DATE(NOW());"));
             preparedStatement.execute();
             ResultSet result = preparedStatement.executeQuery("select * from employee_payroll");
             while (result.next()){
