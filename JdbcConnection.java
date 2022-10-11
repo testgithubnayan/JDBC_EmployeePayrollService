@@ -1,38 +1,38 @@
 package com.bridgelabz;
 
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.util.Enumeration;
+import java.sql.*;
 
-public class JdbcConnection {
-    public static Connection connectToDatabase() {
-        String URL = "jdbc:mysql://localhost:2109/payroll_service";
-        String USER = "Nayan soni";
-        String PASS = "Nayan99*#";
+public class JDBCConnection {
+    public static void main(String[] args) {
+
+        String URL = "jdbc:mysql://localhost:3306/payroll_service";
+        String USER = "root";
+        String PASS = "nayan@7211";
+
         Connection connection;
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            System.out.println("can't find the driver in the classpath!");
-        }
 
-        listDrivers();
+        } catch (ClassNotFoundException e) {
+            System.out.println("Cannot find the driver in ths classpath");
+        }
+        
         try {
             connection = DriverManager.getConnection(URL, USER, PASS);
-
-            return connection;
+            PreparedStatement preparedStatement = connection.prepareStatement("update employee_payroll set salary=? where name=? ");
+            preparedStatement.setDouble(1,150000);
+            preparedStatement.setString(2,"daniel");
+            preparedStatement.execute();
+            ResultSet result = preparedStatement.executeQuery("select * from employee_payroll");
+            while (result.next()){
+                System.out.println(result.getInt("id")+" " +
+                        result.getString(2) +" "+
+                        result.getDouble(4)+" "+
+                        result.getDate(5));
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
-        }
-    }
-
-    private static void listDrivers() {
-        Enumeration<Driver> driverList = DriverManager.getDrivers();
-        while (driverList.hasMoreElements()) {
-            Driver driverClass = driverList.nextElement();
-            System.out.println(driverClass.getClass().getName() + " ");
         }
     }
 }
