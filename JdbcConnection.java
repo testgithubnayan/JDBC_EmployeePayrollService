@@ -1,38 +1,37 @@
 package com.bridgelabz;
 
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
+import java.sql.*;
 import java.util.Enumeration;
 
-public class JdbcConnection {
-    public static Connection connectToDatabase() {
-        String URL = "jdbc:mysql://localhost:2109/payroll_service";
-        String USER = "Nayan soni";
-        String PASS = "Nayan99*#";
+public class JDBCConnection {
+    public static void main(String[] args) {
+
+        String URL = "jdbc:mysql://localhost:3306/payroll_service";
+        String USER = "root";
+        String PASS = "Yasin@786";
+
         Connection connection;
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            System.out.println("can't find the driver in the classpath!");
-        }
 
-        listDrivers();
+        } catch (ClassNotFoundException e) {
+            System.out.println("Cannot find the driver in ths classpath");
+        }
+        
         try {
             connection = DriverManager.getConnection(URL, USER, PASS);
-
-            return connection;
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery("select * from employee_payroll");
+            while (result.next()){
+                System.out.println(result.getInt("id")+" " +
+                        result.getString(2) +" "+
+                        result.getString(3)+ " "+
+                        result.getDouble(4)+" "+
+                        result.getDate(5));
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
-        }
-    }
-
-    private static void listDrivers() {
-        Enumeration<Driver> driverList = DriverManager.getDrivers();
-        while (driverList.hasMoreElements()) {
-            Driver driverClass = driverList.nextElement();
-            System.out.println(driverClass.getClass().getName() + " ");
         }
     }
 }
